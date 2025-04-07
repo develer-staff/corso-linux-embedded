@@ -1,0 +1,78 @@
+From fb61efacf68d37b3024771aa8014e7b3744df0a8 Mon Sep 17 00:00:00 2001
+From: Marco Meloni <warco@develer.com>
+Date: Mon, 2 Dec 2024 11:50:18 +0100
+Subject: [PATCH] drivers/misc: add hello.c driver
+
+---
+ drivers/misc/Kconfig  |  8 ++++++++
+ drivers/misc/Makefile |  1 +
+ drivers/misc/hello.c  | 29 +++++++++++++++++++++++++++++
+ 3 files changed, 38 insertions(+)
+ create mode 100644 drivers/misc/hello.c
+
+diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
+index a76c6c9ec..0c3c0a9d6 100644
+--- a/drivers/misc/Kconfig
++++ b/drivers/misc/Kconfig
+@@ -570,6 +570,14 @@ config TPS6594_PFSM
+ 	  This driver can also be built as a module.  If so, the module
+ 	  will be called tps6594-pfsm.
+ 
++config HELLO_EXAMPLE
++	tristate "Hello Example"
++	help
++	  This option enables the Hello Example module
++	  of the Linux Embedded course.
++
++	  Say N here unless you know what you are doing!!!
++
+ source "drivers/misc/c2port/Kconfig"
+ source "drivers/misc/eeprom/Kconfig"
+ source "drivers/misc/cb710/Kconfig"
+diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
+index 02bc56693..811184643 100644
+--- a/drivers/misc/Makefile
++++ b/drivers/misc/Makefile
+@@ -68,3 +68,4 @@ obj-$(CONFIG_TMR_MANAGER)      += xilinx_tmr_manager.o
+ obj-$(CONFIG_TMR_INJECT)	+= xilinx_tmr_inject.o
+ obj-$(CONFIG_TPS6594_ESM)	+= tps6594-esm.o
+ obj-$(CONFIG_TPS6594_PFSM)	+= tps6594-pfsm.o
++obj-$(CONFIG_HELLO_EXAMPLE)	+= hello.o
+diff --git a/drivers/misc/hello.c b/drivers/misc/hello.c
+new file mode 100644
+index 000000000..7479780a2
+--- /dev/null
++++ b/drivers/misc/hello.c
+@@ -0,0 +1,29 @@
++#include <linux/init.h>
++#include <linux/module.h>
++#include <linux/kernel.h>
++
++static char *whom = "World";
++module_param(whom, charp, 0644);
++MODULE_PARM_DESC(whom, "Hello message");
++
++static int howmany = 1;
++module_param(howmany, int, 0644);
++MODULE_PARM_DESC(howmany, "Num greetings");
++
++static int __init hello_init(void) {
++  for (int i = 0; i < howmany; ++i) {
++    pr_info("Hello %s\n", whom);
++  }
++  return 0;
++}
++
++static void __exit hello_exit(void) {
++  pr_info("Bye %s\n", whom);
++}
++
++module_init(hello_init);
++module_exit(hello_exit);
++
++MODULE_LICENSE("GPL");
++MODULE_DESCRIPTION("Hello module");
++MODULE_AUTHOR("Me");
+-- 
+2.43.0
+
