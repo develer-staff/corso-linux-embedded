@@ -1,0 +1,75 @@
+diff --git a/package/Config.in b/package/Config.in
+index e9e8d93d..a9de04b3 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2247,6 +2247,7 @@ menu "Miscellaneous"
+ 	source "package/xmrig/Config.in"
+ 	source "package/xutil_util-macros/Config.in"
+ 	source "package/z3/Config.in"
++	source "package/hello/Config.in"
+ endmenu
+ 
+ menu "Networking applications"
+diff --git a/package/hello/Config.in b/package/hello/Config.in
+new file mode 100644
+index 00000000..8ef5fbb3
+--- /dev/null
++++ b/package/hello/Config.in
+@@ -0,0 +1,4 @@
++config BR2_PACKAGE_HELLO
++	bool "hello"
++	help
++	  This is a simple hello world C program.
+diff --git a/package/hello/Makefile b/package/hello/Makefile
+new file mode 100644
+index 00000000..dd56fd3c
+--- /dev/null
++++ b/package/hello/Makefile
+@@ -0,0 +1,7 @@
++all: hello
++
++hello: hello.c
++	$(CC) $(CFLAGS) $< -o $@
++
++clean:
++	rm -f hello
+diff --git a/package/hello/hello.c b/package/hello/hello.c
+new file mode 100644
+index 00000000..93af6730
+--- /dev/null
++++ b/package/hello/hello.c
+@@ -0,0 +1,7 @@
++#include <stdio.h>
++
++int main(int, char **)
++{
++	printf("Hello World!\n");
++	return 0;
++}
+diff --git a/package/hello/hello.mk b/package/hello/hello.mk
+new file mode 100644
+index 00000000..6f5c7304
+--- /dev/null
++++ b/package/hello/hello.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# hello
++#
++################################################################################
++
++HELLO_VERSION = 1.0
++HELLO_SOURCE = htop-$(HTOP_VERSION).tar.xz
++HELLO_SITE = package/hello
++HELLO_SITE_METHOD = local
++HELLO_LICENSE = GPL-2.0+
++
++define HELLO_BUILD_CMDS
++    $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
++endef
++
++define HELLO_INSTALL_TARGET_CMDS
++    $(INSTALL) -D -m 0755 $(@D)/hello  $(TARGET_DIR)/usr/bin
++endef
++
++$(eval $(generic-package))
