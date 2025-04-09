@@ -1,0 +1,9 @@
+[Unit]
+Description=Hello service 1
+
+[Service]
+Type=notify
+ExecStart=/home/warco/Corsi/Linux_Embedded/corso-linux-embedded/day3/ex1/script.sh
+
+[Install]
+WantedBy=multi-user.target

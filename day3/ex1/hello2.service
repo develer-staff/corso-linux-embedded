@@ -1,0 +1,9 @@
+[Unit]
+Description=Hello service 2
+Requires=hello1.service
+
+[Service]
+ExecStart=/usr/bin/echo Hello from service 2
+
+[Install]
+WantedBy=multi-user.target
