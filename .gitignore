@@ -1,0 +1,9 @@
+*
+!Makefile
+!*.c
+!*.service
+!*.sh
+!*.md
+!*.patch"
+!*.txt
+!.gitignore
